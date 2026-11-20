@@ -1,0 +1,190 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Семейный план безопасности</title>
+<style>
+:root{--ink:#17211f;--paper:#f7f9f8;--green:#12403c;--yellow:#f2c230;--line:#aebbb7;--mute:#4f5d59;color-scheme:light}
+*{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{margin:0;background:var(--paper);color:var(--ink);font:17px/1.55 "Segoe UI",system-ui,-apple-system,Roboto,Arial,sans-serif}
+main{max-width:860px;margin:0 auto;padding:28px 18px 64px}
+h1{font-size:clamp(2rem,6vw,3.2rem);line-height:1.05;margin:0 0 10px;color:var(--green);letter-spacing:-.02em}
+h2{font-size:1.35rem;margin:0 0 12px;color:var(--green)}
+.lead{max-width:60ch;color:var(--mute);margin:0 0 20px}
+.tools{display:flex;gap:10px;flex-wrap:wrap;margin-bottom:26px}
+button{font:inherit;font-weight:600;padding:11px 18px;border-radius:6px;border:2px solid var(--green);background:var(--green);color:#fff;cursor:pointer}
+button.ghost{background:transparent;color:var(--green)}
+button:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid var(--yellow);outline-offset:2px}
+.sos{background:var(--yellow);border-radius:8px;padding:16px 18px;margin-bottom:30px}
+.sos h2{color:var(--ink);margin-bottom:10px}
+.nums{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:10px}
+.nums label{display:block;font-size:.9rem}
+.nums input{font-size:2rem;font-weight:800;width:100%;background:transparent;border:0;border-bottom:2px solid var(--ink);padding:0;color:var(--ink)}
+.sos p{margin:10px 0 0;font-size:.9rem}
+section{border-left:6px solid var(--green);padding:2px 0 2px 18px;margin:0 0 34px;break-inside:avoid}
+input[type=text],input[type=tel],input[type=date],textarea{font:inherit;width:100%;background:#fff;border:1px solid var(--line);border-radius:5px;padding:8px 10px;color:var(--ink)}
+textarea{min-height:72px;resize:vertical}
+.rows{display:grid;gap:8px}
+.row{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.row.three{grid-template-columns:1fr 1fr 1fr}
+.row.contact{grid-template-columns:1.2fr 1fr 1fr}
+.hint{font-size:.9rem;color:var(--mute);margin:0 0 10px}
+.check{display:flex;gap:12px;align-items:flex-start;padding:6px 0;cursor:pointer}
+.check input{width:22px;height:22px;margin-top:3px;flex:none;accent-color:var(--green)}
+ol{margin:0;padding-left:22px}
+li{margin:4px 0}
+h3{font-size:1.05rem;margin:18px 0 6px}
+footer{font-size:.85rem;color:var(--mute);border-top:1px solid var(--line);padding-top:14px}
+@media (max-width:620px){.row,.row.three,.row.contact{grid-template-columns:1fr}}
+@media print{
+ @page{margin:12mm}
+ body{background:#fff;font-size:12pt}
+ main{padding:0;max-width:none}
+ .tools{display:none}
+ .sos{border:2px solid #000;background:#fff}
+ input[type=text],input[type=tel],input[type=date],textarea{border:0;border-bottom:1px solid #000;border-radius:0;padding:2px 0;background:transparent}
+ textarea{min-height:0;resize:none}
+ .nums input{border-bottom:0}
+}
+@media (prefers-reduced-motion:no-preference){html{scroll-behavior:smooth}}
+</style>
+</head>
+<body>
+<main>
+<h1>Семейный план безопасности</h1>
+<p class="lead">Заполните один раз вместе с семьёй, распечатайте и повесьте у входной двери. Всё, что вы вводите, остаётся только в вашем браузере и никуда не отправляется.</p>
+
+<div class="tools">
+ <button type="button" id="print">Распечатать или сохранить в PDF</button>
+ <button type="button" class="ghost" id="clear">Очистить всё</button>
+</div>
+
+<div class="sos">
+ <h2>Экстренные номера</h2>
+ <div class="nums">
+  <label>Единая служба<input type="text" inputmode="tel" data-k="n112" value="112"></label>
+  <label>Пожарные<input type="text" inputmode="tel" data-k="n101" value="101"></label>
+  <label>Полиция<input type="text" inputmode="tel" data-k="n102" value="102"></label>
+  <label>Скорая помощь<input type="text" inputmode="tel" data-k="n103" value="103"></label>
+  <label>Газовая служба<input type="text" inputmode="tel" data-k="n104" value="104"></label>
+ </div>
+ <p>Номера указаны для Кыргызстана. Если вы живёте в другой стране или номера изменились, исправьте их.</p>
+</div>
+
+<section>
+ <h2>Наш адрес</h2>
+ <p class="hint">Его нужно уметь быстро назвать диспетчеру. Дети тоже должны его знать.</p>
+ <div class="rows"><input type="text" data-k="address" placeholder="Город, улица, дом, квартира, подъезд, этаж"><input type="text" data-k="landmark" placeholder="Ориентир рядом с домом"></div>
+</section>
+
+<section>
+ <h2>Кому звонить</h2>
+ <p class="hint">Близкие и тот, кто живёт в другом районе или городе: ему проще дозвониться, когда связь перегружена.</p>
+ <div class="rows" id="contacts"></div>
+</section>
+
+<section>
+ <h2>Где мы встречаемся</h2>
+ <div class="rows">
+  <textarea data-k="meet1" placeholder="Рядом с домом: например, детская площадка во дворе (если нужно выйти из дома)"></textarea>
+  <textarea data-k="meet2" placeholder="Далеко от дома: например, дом родственников (если нельзя вернуться в район)"></textarea>
+ </div>
+</section>
+
+<section>
+ <h2>Здоровье семьи</h2>
+ <p class="hint">Это пригодится врачам, если вы не сможете рассказать сами.</p>
+ <div class="rows" id="people"></div>
+</section>
+
+<section>
+ <h2>Безопасность дома</h2>
+ <div id="homeChecks"></div>
+ <div class="rows" style="margin-top:8px">
+  <input type="text" data-k="exit" placeholder="Запасной выход из дома или квартиры (балкон, второй выход, окно)">
+  <input type="text" data-k="shutoff" placeholder="Где перекрывается газ, вода и электричество">
+ </div>
+</section>
+
+<section>
+ <h2>Тревожный чемоданчик</h2>
+ <p class="hint">Соберите в одну сумку у выхода. Рассчитайте на всех, включая детей и питомцев.</p>
+ <div id="bagChecks"></div>
+</section>
+
+<section>
+ <h2>Дети</h2>
+ <div class="rows">
+  <input type="text" data-k="codeword" placeholder="Кодовое слово семьи">
+  <p class="hint" style="margin:0">Если за ребёнком приходит человек, которого он плохо знает, он должен назвать это слово. Не называйте его чужим и не пишите в открытых местах.</p>
+  <input type="text" data-k="school" placeholder="Школа или садик: адрес, телефон, кто может забрать ребёнка">
+ </div>
+</section>
+
+<section>
+ <h2>Что делать</h2>
+ <h3>Пожар</h3>
+ <ol>
+  <li>Поднимите тревогу и выводите всех к выходу.</li>
+  <li>При дыме пригнитесь: чистый воздух у пола. Закрывайте двери за собой.</li>
+  <li>Не пользуйтесь лифтом.</li>
+  <li>Выйдя наружу, звоните в пожарную службу и не возвращайтесь в дом.</li>
+  <li>Соберитесь на месте встречи и пересчитайте всех.</li>
+ </ol>
+ <h3>Землетрясение</h3>
+ <ol>
+  <li>Во время толчков: пригнитесь, укройтесь под прочным столом и держитесь за него. Отойдите от окон и шкафов.</li>
+  <li>Не бегите по лестнице и не прыгайте из окон, пока толчки не прекратятся.</li>
+  <li>После: проверьте, все ли целы. Если пахнет газом, перекройте его и выходите.</li>
+  <li>Ждите повторных толчков. На улице держитесь подальше от зданий, столбов и проводов.</li>
+ </ol>
+ <h3>Запах газа или угарный газ</h3>
+ <ol>
+  <li>Не включайте свет и не зажигайте огонь, не пользуйтесь телефоном в помещении.</li>
+  <li>Откройте окна и выведите всех на свежий воздух.</li>
+  <li>Звоните в газовую службу только снаружи.</li>
+  <li>При головной боли, тошноте и сонливости у нескольких людей сразу вызывайте скорую.</li>
+ </ol>
+</section>
+
+<section>
+ <h2>Проверка плана</h2>
+ <p class="hint">Раз в полгода проверяйте номера, срок годности аптечки и огнетушителя, обновляйте чемоданчик и повторяйте с детьми, что делать.</p>
+ <div class="row"><label>Последняя проверка <input type="date" data-k="reviewed"></label></div>
+</section>
+
+<footer>Это памятка, а не замена инструкциям спасательных служб. Свободное ПО под лицензией MIT.</footer>
+</main>
+
+<script>
+(function(){
+ function rows(id,n,html){var el=document.getElementById(id),s='';for(var i=0;i<n;i++)s+=html(i);el.innerHTML=s}
+ rows('contacts',5,function(i){return '<div class="row contact"><input type="text" data-k="cn'+i+'" placeholder="Имя"><input type="tel" data-k="cp'+i+'" placeholder="Телефон"><input type="text" data-k="cr'+i+'" placeholder="Кто это"></div>'});
+ rows('people',4,function(i){return '<div class="row three"><input type="text" data-k="pn'+i+'" placeholder="Имя"><input type="text" data-k="pb'+i+'" placeholder="Группа крови"><input type="text" data-k="pa'+i+'" placeholder="Аллергии, лекарства"></div>'});
+ function checks(id,key,items){var s='';items.forEach(function(t,i){s+='<label class="check"><input type="checkbox" data-k="'+key+i+'"><span>'+t+'</span></label>'});document.getElementById(id).innerHTML=s}
+ checks('homeChecks','h',['Все взрослые и дети знают, как выйти из дома из любой комнаты','Дома есть исправный огнетушитель, срок годности не истёк','Установлены дымовые датчики и датчик угарного газа, батарейки проверены','Все знают, где перекрывается газ, вода и электричество','Домашняя аптечка укомплектована','Ключи от выходов лежат в доступном месте']);
+ checks('bagChecks','b',['Копии документов в водонепроницаемом пакете','Наличные деньги','Вода и еда, которую не нужно готовить, на трое суток','Фонарик, запасные батарейки, павербанк и зарядка','Личные лекарства и аптечка','Тёплая одежда и одеяло','Свисток, чтобы подать сигнал','Запасные очки и ключи','Всё нужное для детей и питомцев']);
+
+ var K='family-safety-plan-v1',S={};
+ try{S=JSON.parse(localStorage.getItem(K)||'{}')}catch(e){}
+ var els=document.querySelectorAll('[data-k]');
+ els.forEach(function(el){
+  var k=el.dataset.k;
+  if(k in S){if(el.type==='checkbox')el.checked=!!S[k];else el.value=S[k]}
+  el.addEventListener('input',function(){
+   S[k]=el.type==='checkbox'?el.checked:el.value;
+   try{localStorage.setItem(K,JSON.stringify(S))}catch(e){}
+  });
+ });
+ document.getElementById('print').addEventListener('click',function(){window.print()});
+ document.getElementById('clear').addEventListener('click',function(){
+  if(!confirm('Удалить всё, что вы заполнили?'))return;
+  try{localStorage.removeItem(K)}catch(e){}
+  location.reload();
+ });
+})();
+</script>
+</body>
+</html>
